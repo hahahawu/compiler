@@ -16,7 +16,7 @@ analysis, symbols table and exception handling.
 
 ## The arithmetic expressions
 
-+ , - , * , / , ++ , --
++, - , * , / , ++ , --
 
 ## The relational expressions
 
@@ -37,6 +37,7 @@ analysis, symbols table and exception handling.
 # Input & Output
 
 input : a .txt file which contains your source code
+
 output : if the code is correct, the intermediate code and symbols table are excepted. Else, you are 
 supposed to point the location and reason of exception.
 
