@@ -1,4 +1,4 @@
-package com.compiler.preservation;
+package com.compiler.symbols;
 
 public class Operators {
     /**
