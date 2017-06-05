@@ -13,7 +13,7 @@ public class Constants {
     /*boolean*/
     public static final int BOOLEAN = 12;
     /*String*/
-    public static final int STRING = 13;
+    public static final int CHAR = 13;
     /*Array*/
     public static final int ARRAY = 14;
 }
