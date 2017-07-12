@@ -1,0 +1,40 @@
+
+A -> id := E
+E -> E1 + E2
+E -> E1 * E2
+E -> -E1
+E -> (E1)
+E -> id
+E -> E1;
+
+E -> E^ E | E°E | ¬E | (E) | i | i rop i
+E^-> E∧
+E° -> E∨
+
+S -> C S
+   | TP S
+   | Wd S
+   | { L }
+   | A
+L -> LS S | S
+C -> if E then
+TP -> C S else
+Wd -> W E do
+W -> while
+LS -> L;
+
+S -> SO
+    | SO otherwise: S;
+SO -> CS C
+CS -> case E of
+C -> Ci:S;
+Ci -> id
+
+S -> L := E
+E -> L
+L -> Elist]
+L -> id
+Elist -> Elist,E
+Elist -> id[E
+
+

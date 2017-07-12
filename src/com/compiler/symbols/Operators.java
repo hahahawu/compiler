@@ -24,7 +24,7 @@ public class Operators {
     public static final int DEC = 205;
 
     /* := */
-    public static final int EQU = 206;
+    public static final int ASSIGNMENT = 206;
 
     /* != */
     public static final int NEQ = 207;
@@ -49,4 +49,8 @@ public class Operators {
 
     /* ! */
     public static final int NOT = 214;
+
+    /* == */
+    public static final int EQU = 215;
+
 }

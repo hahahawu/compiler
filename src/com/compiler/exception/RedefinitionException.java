@@ -1,11 +1,9 @@
 package com.compiler.exception;
 
 public class RedefinitionException extends Exception {
-    public RedefinitionException(String message) {
-        super(message);
-    }
+    public RedefinitionException() {}
 
-    public RedefinitionException() {
-        super("Redefinition error!");
+    public RedefinitionException(String message, int row){
+        super("Line "+row+" error : "+message);
     }
 }

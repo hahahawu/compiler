@@ -14,6 +14,7 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
     private String strToken = "";
     private String line = null;
     private int pointer = 0;
+    private int currRow = 1;
 
     /**
      * @return the next char
@@ -88,9 +89,11 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
             return strToken;
         }
         else try {
-            throw new RedefinitionException(strToken+"has been defined.");
+            throw new RedefinitionException();
         } catch (RedefinitionException e) {
-            e.printStackTrace();
+            System.out.println(ch+"redefinition");
+//            e.printStackTrace();
+//            System.exit(-1);
         }
         return null;
     }
@@ -108,14 +111,17 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
         else return strToken.hashCode();
     }
 
-    public void lexicalAnalyzer(String line){
+
+    public void lexicalAnalyzer(String line, int row){
+        this.currRow = row;
         this.line = line;
+        this.pointer = 0;
         while (pointer<line.length()){
             strToken = "";
             getChar();
             while (getBC()){getChar();}
             if (isLetter()){
-                while (isLetter() || isLetter()){
+                while (isLetter() || isDigit()){
                     concat();
                     getChar();
                 }
@@ -136,14 +142,119 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
                 int value = insertConst();
                 System.out.println("(10,"+value+")");
             }
-            else if (ch == '(') System.out.println("(102,-)");
-            else if (ch == ')') System.out.println("(103,-)");
-            else if (ch == '>') System.out.println("(208,-)");
-            else try {
-                    throw new IllegalInputException("Your input argument is not legal.");
-                } catch (IllegalInputException e) {
-                    e.printStackTrace();
+            else {
+                switch (ch){
+                    case '+':
+                        getChar();
+                        if (ch == '+') System.out.println("(204,-)");
+                        else {
+                            System.out.println("(200,-)");
+                            retract();
+                        }
+                        break;
+                    case '-':
+                        getChar();
+                        if (ch == '-') System.out.println("(205,-)");
+                        else {
+                            System.out.println("(201,-)");
+                            retract();
+                        }
+                        break;
+                    case '*':
+                        System.out.println("(202,*)");
+                        break;
+                    case '\\':
+                        System.out.println("(203,1)");
+                        break;
+                    case ':':
+                        getChar();
+                        if (ch == '=') System.out.println("(206,-)");
+                        else {
+                            System.out.println("(108,-)");
+                            retract();
+                        }
+                        break;
+                    case '!':
+                        getChar();
+                        if (ch == '=') System.out.println("(207,-)");
+                        else {
+                            System.out.println("(214,-)");
+                            retract();
+                        }
+                        break;
+                    case '>':
+                        getChar();
+                        if (ch == '=') System.out.println("(209,-)");
+                        else {
+                            System.out.println("(208,-)");
+                            retract();
+                        }
+                        break;
+                    case '<':
+                        getChar();
+                        if (ch == '=') System.out.println("(211,-)");
+                        else {
+                            System.out.println("(210,-)");
+                            retract();
+                        }
+                        break;
+                    case '&':
+                        getChar();
+                        if (ch == '&') System.out.println("(212,-)");
+                        else {
+                            try {
+                                throw new IllegalInputException();
+                            } catch (IllegalInputException e) {
+                                System.out.println("Syntax Error.Line "+row+" : Your input is not legal.");
+                                System.exit(-1);
+                            }
+                        }
+                        break;
+                    case '|':
+                        getChar();
+                        if (ch == '|') System.out.println("(213,-)");
+                        else {
+                            try {
+                                throw new IllegalInputException();
+                            } catch (IllegalInputException e) {
+                                System.out.println("Syntax Error.Line "+row+" : Your input is not legal.");
+                                System.exit(-1);
+                            }
+                        }
+                        break;
+                    case ',':
+                        System.out.println("(100,-)");
+                        break;
+                    case ';':
+                        System.out.println("(101,-)");
+                        break;
+                    case '(':
+                        System.out.println("(102,-)");
+                        break;
+                    case ')':
+                        System.out.println("(103,-)");
+                        break;
+                    case '[':
+                        System.out.println("(104,-)");
+                        break;
+                    case ']':
+                        System.out.println("(105,-)");
+                        break;
+                    case '{':
+                        System.out.println("(106,-)");
+                        break;
+                    case '}':
+                        System.out.println("(107,-)");
+                        break;
+                    default:
+                        try {
+                            throw new IllegalInputException();
+                        } catch (IllegalInputException e) {
+                            System.out.println("Syntax Error.Line "+row+" : Your input is not legal.");
+                            System.exit(-1);
+                        }
                 }
+            }
         }
     }
 

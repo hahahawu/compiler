@@ -27,4 +27,16 @@ public class KeyWords {
 
     /* break */
     public static final int BREAK = 307;
+
+    /* int */
+    public static final int INT = 308;
+
+    /* float */
+    public static final int FLOAT = 309;
+
+    /* double */
+    public static final int DOUBLE = 310;
+
+    /* return  */
+    public static final int RETURN = 311;
 }
