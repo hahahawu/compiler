@@ -62,7 +62,3 @@ while a<20 && b>8 do{
     }
 }
 ```
-
-# Licence
-
-MIT
