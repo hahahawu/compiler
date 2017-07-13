@@ -7,12 +7,15 @@ import java.io.*;
 
 public class Compiler {
     public static void main(String[] args){
-        LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzerImpl();
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("code.txt")));
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("test.txt")));
             String line = null;
             int row = 1;
-            while ((line = br.readLine()) != null) lexicalAnalyzer.lexicalAnalyzer(line,row++);
+            LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzerImpl();
+            while ((line = br.readLine()) != null) {
+                lexicalAnalyzer.lexicalAnalyzer(line,row++);
+            }
+            lexicalAnalyzer.lexicalAnalyzer("#",row);
         } catch (IOException e) {
             e.printStackTrace();
         }

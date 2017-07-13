@@ -1,9 +1,11 @@
 package com.compiler.procedure.lexiacalAnalysis;
 
 import com.compiler.exception.IllegalInputException;
-import com.compiler.exception.RedefinitionException;
+import com.compiler.model.Lexical2Syntax;
 import com.compiler.procedure.symboltables.ConstantsTable;
 import com.compiler.procedure.symboltables.SymbolTable;
+import com.compiler.procedure.syntacticAnalysis.SynacticAnalyzerImpl;
+import com.compiler.procedure.syntacticAnalysis.SyntacticAnalyzer;
 import com.compiler.symbols.KeyWords;
 
 import java.lang.reflect.Field;
@@ -15,6 +17,7 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
     private String line = null;
     private int pointer = 0;
     private int currRow = 1;
+    private SyntacticAnalyzer syntacticAnalyzer = new SynacticAnalyzerImpl();
 
     /**
      * @return the next char
@@ -84,18 +87,8 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
      * @return the id of strToken in the symbol table
      */
     private String insertID(){
-        if (!SymbolTable.symbolMap.containsKey(strToken)){
-            SymbolTable.symbolMap.put(strToken,null);
-            return strToken;
-        }
-        else try {
-            throw new RedefinitionException();
-        } catch (RedefinitionException e) {
-            System.out.println(ch+"redefinition");
-//            e.printStackTrace();
-//            System.exit(-1);
-        }
-        return null;
+        SymbolTable.symbolMap.put(strToken,null);
+        return strToken;
     }
 
     /**
@@ -104,15 +97,12 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
      */
     private int insertConst(){
         Integer temp = Integer.parseInt(strToken);
-        if (!ConstantsTable.constTable.containsKey(temp.hashCode())){
-            ConstantsTable.constTable.put(temp.hashCode(),temp);
-            return temp.hashCode();
-        }
-        else return strToken.hashCode();
+        ConstantsTable.constTable.put(temp.hashCode(),temp);
+        return temp.hashCode();
     }
 
 
-    public void lexicalAnalyzer(String line, int row){
+    public Object lexicalAnalyzer(String line, int row){
         this.currRow = row;
         this.line = line;
         this.pointer = 0;
@@ -129,9 +119,13 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
                 int code = reserve();
                 if (code == 0){
                     String value = insertID();
-                    System.out.println("(1,"+value+")");
+//                    System.out.println("(1,"+value+")");
+                    syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(1,value));
                 }
-                else System.out.println("("+code+",-)");
+                else {
+//                    System.out.println("("+code+",-)");
+                    syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(code,strToken));
+                }
             }
             else if (isDigit()){
                 while (isDigit()){
@@ -140,122 +134,167 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
                 }
                 retract();
                 int value = insertConst();
-                System.out.println("(10,"+value+")");
+//                System.out.println("(10,"+value+")");
+                syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(10,value+""));
             }
             else {
                 switch (ch){
                     case '+':
                         getChar();
-                        if (ch == '+') System.out.println("(204,-)");
+                        if (ch == '+') {
+//                            System.out.println("(204,++)");
+                            syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(204,"++"));
+                        }
                         else {
-                            System.out.println("(200,-)");
+//                            System.out.println("(200,+)");
+                            syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(200,"+"));
                             retract();
                         }
                         break;
                     case '-':
                         getChar();
-                        if (ch == '-') System.out.println("(205,-)");
+                        if (ch == '-') {
+//                            System.out.println("(205,--)");
+                            syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(205,"--"));
+                        }
                         else {
-                            System.out.println("(201,-)");
+//                            System.out.println("(201,-)");
+                            syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(201,"-"));
                             retract();
                         }
                         break;
                     case '*':
-                        System.out.println("(202,*)");
+//                        System.out.println("(202,*)");
+                        syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(202,"*"));
                         break;
-                    case '\\':
-                        System.out.println("(203,1)");
+                    case '/':
+//                        System.out.println("(203,/)");
+                        syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(203,"/"));
                         break;
                     case ':':
                         getChar();
-                        if (ch == '=') System.out.println("(206,-)");
+                        if (ch == '=') {
+//                            System.out.println("(206,:=)");
+                            syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(206,":="));
+                        }
                         else {
-                            System.out.println("(108,-)");
+//                            System.out.println("(108,:)");
+                            syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(108,":"));
                             retract();
                         }
                         break;
                     case '!':
                         getChar();
-                        if (ch == '=') System.out.println("(207,-)");
+                        if (ch == '=') {
+//                            System.out.println("(207,!=)");
+                            syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(207,"!="));
+                        }
                         else {
-                            System.out.println("(214,-)");
+//                            System.out.println("(214,!)");
+                            syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(214,"!"));
                             retract();
                         }
                         break;
                     case '>':
                         getChar();
-                        if (ch == '=') System.out.println("(209,-)");
+                        if (ch == '=') {
+//                            System.out.println("(209,>=)");
+                            syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(209,">="));
+                        }
                         else {
-                            System.out.println("(208,-)");
+//                            System.out.println("(208,>)");
+                            syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(208,">"));
                             retract();
                         }
                         break;
                     case '<':
                         getChar();
-                        if (ch == '=') System.out.println("(211,-)");
+                        if (ch == '='){
+//                            System.out.println("(211,<=)");
+                            syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(211,"<="));
+                        }
                         else {
-                            System.out.println("(210,-)");
+//                            System.out.println("(210,<)");
+                            syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(210,"<"));
                             retract();
                         }
                         break;
                     case '&':
                         getChar();
-                        if (ch == '&') System.out.println("(212,-)");
+                        if (ch == '&') {
+//                            System.out.println("(212,&&)");
+                            syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(212,"&&"));
+                        }
                         else {
                             try {
                                 throw new IllegalInputException();
                             } catch (IllegalInputException e) {
                                 System.out.println("Syntax Error.Line "+row+" : Your input is not legal.");
-                                System.exit(-1);
+//                                System.exit(-1);
                             }
                         }
                         break;
                     case '|':
                         getChar();
-                        if (ch == '|') System.out.println("(213,-)");
+                        if (ch == '|') {
+//                            System.out.println("(213,||)");
+                            syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(213,"||"));
+                        }
                         else {
                             try {
                                 throw new IllegalInputException();
                             } catch (IllegalInputException e) {
                                 System.out.println("Syntax Error.Line "+row+" : Your input is not legal.");
-                                System.exit(-1);
+//                                System.exit(-1);
                             }
                         }
                         break;
                     case ',':
-                        System.out.println("(100,-)");
+//                        System.out.println("(100,,)");
+                        syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(100,","));
                         break;
                     case ';':
-                        System.out.println("(101,-)");
+//                        System.out.println("(101,;)");
+                        syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(101,";"));
                         break;
                     case '(':
-                        System.out.println("(102,-)");
+//                        System.out.println("(102,()");
+                        syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(102,"("));
                         break;
                     case ')':
-                        System.out.println("(103,-)");
+//                        System.out.println("(103,))");
+                        syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(103,")"));
                         break;
                     case '[':
-                        System.out.println("(104,-)");
+//                        System.out.println("(104,[)");
+                        syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(104,"["));
                         break;
                     case ']':
-                        System.out.println("(105,-)");
+//                        System.out.println("(105,])");
+                        syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(105,"]"));
                         break;
                     case '{':
-                        System.out.println("(106,-)");
+//                        System.out.println("(106,{)");
+                        syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(106,"{"));
                         break;
                     case '}':
-                        System.out.println("(107,-)");
+//                        System.out.println("(107,-)");
+                        syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(107,"}"));
+                        break;
+                    case '#':
+                        syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(0,"#"));
                         break;
                     default:
                         try {
                             throw new IllegalInputException();
                         } catch (IllegalInputException e) {
-                            System.out.println("Syntax Error.Line "+row+" : Your input is not legal.");
-                            System.exit(-1);
+                            System.out.println("Syntax Error.Line "+row+" : Your input \""+ch+"\" is not legal.");
+//                            System.exit(-1);
                         }
                 }
             }
         }
+        return null;
     }
 
 }

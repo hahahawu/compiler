@@ -1,5 +1,5 @@
 package com.compiler.procedure.lexiacalAnalysis;
 
 public interface LexicalAnalyzer {
-    public void lexicalAnalyzer(String line, int row);
+    Object lexicalAnalyzer(String line, int row);
 }
