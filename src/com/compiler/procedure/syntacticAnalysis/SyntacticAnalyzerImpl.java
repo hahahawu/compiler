@@ -8,13 +8,13 @@ import java.util.Map;
 import java.util.Stack;
 
 
-public class SynacticAnalyzerImpl implements SyntacticAnalyzer{
+public class SyntacticAnalyzerImpl implements SyntacticAnalyzer{
 
     private static Stack<Integer> state = new Stack<>();
     private static Stack<String> op = new Stack<>();
-    private static Map<String,String> actionMap = SLRTable.actionMap;
-    private static Map<String,Integer> transMap = SLRTable.transMap;
-    private static Map<Integer,Stmt> stmtMap = SLRTable.stmt;
+    private static Map<String,String> actionMap = SLRTableTest.actionMap;
+    private static Map<String,Integer> transMap = SLRTableTest.transMap;
+    private static Map<Integer,Stmt> stmtMap = SLRTableTest.stmt;
 
     static {
         state.push(0);
@@ -55,6 +55,7 @@ public class SynacticAnalyzerImpl implements SyntacticAnalyzer{
                 try {
                     throw new IllegalInputException();
                 } catch (IllegalInputException e) {
+                    e.printStackTrace();
                     System.out.println("规约错误!");
                     System.exit(-1);
                 }

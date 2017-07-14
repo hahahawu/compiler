@@ -4,7 +4,7 @@ import com.compiler.exception.IllegalInputException;
 import com.compiler.model.Lexical2Syntax;
 import com.compiler.procedure.symboltables.ConstantsTable;
 import com.compiler.procedure.symboltables.SymbolTable;
-import com.compiler.procedure.syntacticAnalysis.SynacticAnalyzerImpl;
+import com.compiler.procedure.syntacticAnalysis.SyntacticAnalyzerImpl;
 import com.compiler.procedure.syntacticAnalysis.SyntacticAnalyzer;
 import com.compiler.symbols.KeyWords;
 
@@ -16,8 +16,8 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
     private String strToken = "";
     private String line = null;
     private int pointer = 0;
-    private int currRow = 1;
-    private SyntacticAnalyzer syntacticAnalyzer = new SynacticAnalyzerImpl();
+//    private int currRow = 1;
+    private SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzerImpl();
 
     /**
      * @return the next char
@@ -103,7 +103,7 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
 
 
     public Object lexicalAnalyzer(String line, int row){
-        this.currRow = row;
+//        this.currRow = row;
         this.line = line;
         this.pointer = 0;
         while (pointer<line.length()){
