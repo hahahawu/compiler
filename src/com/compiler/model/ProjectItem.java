@@ -36,6 +36,15 @@ public class ProjectItem {
         this.location = location;
     }
 
+    public String getNextSymbol(){
+        if (location < right.length()) return right.charAt(location)+"";
+        else return null;
+    }
+
+    public boolean atLast(){
+        return location == right.length();
+    }
+
     @Override
     public String toString() {
         return left+" -> "+right+" $ : "+location;
@@ -49,6 +58,6 @@ public class ProjectItem {
 
     @Override
     public int hashCode() {
-        return left.hashCode() + right.hashCode() + ((Integer)location).hashCode();
+        return left.hashCode()*27 + right.hashCode()*11 + ((Integer)location).hashCode()*19;
     }
 }
