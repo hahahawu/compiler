@@ -25,32 +25,38 @@ public class SLRTable {
     private static boolean[] followFlag;
 
     static {
-        terminator.add("(");terminator.add("+");terminator.add("*");terminator.add(")");terminator.add("i");
+        terminator.add("int");terminator.add(",");terminator.add(";");
+        terminator.add(":=");terminator.add("+");terminator.add("*");terminator.add("i");
         nonTerminals.add("S");nonTerminals.add("E");
-        nonTerminals.add("T");nonTerminals.add("F");
+        nonTerminals.add("D");nonTerminals.add("B");nonTerminals.add("A");
         symbols.addAll(terminator);
         symbols.addAll(nonTerminals);
         flags = new boolean[nonTerminals.size()];
         fst = new boolean[nonTerminals.size()];
         followFlag = new boolean[nonTerminals.size()];
-        stmts.put(0,new Stmt("S","E"));
-        stmts.put(1,new Stmt("E","E+T"));
-        stmts.put(2,new Stmt("E","T"));
-        stmts.put(3,new Stmt("T","T*F"));
-        stmts.put(4,new Stmt("T","F"));
-        stmts.put(5,new Stmt("F","(E)"));
-        stmts.put(6,new Stmt("F","i"));
-        stmtList.put("S",new String[]{"E"});
-        stmtList.put("E",new String[]{"E+T","T"});
-        stmtList.put("T",new String[]{"T*F","F"});
-        stmtList.put("F",new String[]{"(E)","i"});
-        ProjectItem tempPro = new ProjectItem("S","E",0);
+        stmts.put(0,new Stmt("B","S"));
+        stmts.put(1,new Stmt("S","E"));
+        stmts.put(2,new Stmt("S","A"));
+        stmts.put(3,new Stmt("S","S;S"));
+        stmts.put(4,new Stmt("D","D,i"));
+        stmts.put(5,new Stmt("D","int`i"));
+        stmts.put(6,new Stmt("E","E+E"));
+        stmts.put(7,new Stmt("E","E*E"));
+        stmts.put(8,new Stmt("E","i"));
+        stmts.put(9,new Stmt("S","D"));
+        stmts.put(10,new Stmt("A","i`:=`E"));
+        stmtList.put("B",new String[]{"S"});
+        stmtList.put("S",new String[]{"S;S","E","A","D"});
+        stmtList.put("E",new String[]{"E+E","E*E","i"});
+        stmtList.put("D",new String[]{"D,i","int`i"});
+        stmtList.put("A",new String[]{"i`:=`E"});
+        ProjectItem tempPro = new ProjectItem("B","S",0);
         closure.put(0,new SetContainer(make_project(tempPro,false)));
         closure.get(0).getHashSet().add(tempPro);
-        for (String vn : nonTerminals) make_first(vn,0);
-        for (String vn : nonTerminals) make_follow(vn,0);
-        constructor(0);
-        make_actionTable();
+//        for (String vn : nonTerminals) make_first(vn,0);
+//        for (String vn : nonTerminals) make_follow(vn,0);
+//        constructor(0);
+//        make_actionTable();
     }
 
     /**
@@ -64,11 +70,16 @@ public class SLRTable {
         for (String symbol : symbols){
             newSet = new HashSet<>();
             for (ProjectItem projectItem : currSet){
+                String nextSymbol = projectItem.getNextSymbol();
                 if (!projectItem.atLast() && projectItem.getNextSymbol().equals(symbol)){
-                    projectItem.setLocation(projectItem.getLocation()+1);
+                    int strLen = nextSymbol.length() == 1 ?
+                            (projectItem.getLocation() == projectItem.getRight().length()-1 ||
+                                    projectItem.getRight().charAt(projectItem.getLocation()+1) != '`' ? 1 : 2)
+                            : nextSymbol.length()+1;
+                    projectItem.setLocation(projectItem.getLocation()+strLen);
                     newSet.addAll(make_project(projectItem,false));
-                    projectItem.setLocation(projectItem.getLocation()-1);
-                    newSet.add(new ProjectItem(projectItem.getLeft(),projectItem.getRight(),projectItem.getLocation()+1));
+                    projectItem.setLocation(projectItem.getLocation()-strLen);
+                    newSet.add(new ProjectItem(projectItem.getLeft(),projectItem.getRight(),projectItem.getLocation()+strLen));
                 }
             }
             if (!newSet.isEmpty()) {
@@ -152,11 +163,11 @@ public class SLRTable {
         HashSet<ProjectItem> returnSet = new HashSet<>();
         int curr = projectItem.getLocation();
         if (curr == projectItem.getRight().length()) return returnSet;
-        else if (isNonTerminal(projectItem.getRight().charAt(curr)+"")){
-            String tagSymbol = projectItem.getRight().charAt(curr)+"";
+        else if (isNonTerminal(projectItem.getNextSymbol())){
+            String tagSymbol = projectItem.getNextSymbol();
             String[] tempStmts = stmtList.get(tagSymbol);
             for (String item : tempStmts){
-                String nextFirstSymbol = item.charAt(0)+"";
+                String nextFirstSymbol = getNextSymbol(item,0);
                 if (isNonTerminal(nextFirstSymbol) && !flags[nonTerminals.indexOf(nextFirstSymbol)]) {
                     flags[nonTerminals.indexOf(nextFirstSymbol)] = true;
                     HashSet<ProjectItem> tempProSet = make_project(new ProjectItem(tagSymbol,item,0),true);
@@ -166,6 +177,15 @@ public class SLRTable {
             }
         }
         return returnSet;
+    }
+
+    private static String getNextSymbol(String item, int location) {
+        int i = location;
+        while (i<item.length()){
+            if (item.charAt(i) == '`') return item.substring(location,i);
+            else i++;
+        }
+        return item.charAt(location)+"";
     }
 
     private static boolean isNonTerminal(String str) {

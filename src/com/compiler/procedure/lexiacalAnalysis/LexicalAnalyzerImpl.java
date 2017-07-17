@@ -119,11 +119,9 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
                 int code = reserve();
                 if (code == 0){
                     String value = insertID();
-//                    System.out.println("(1,"+value+")");
                     syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(1,value));
                 }
                 else {
-//                    System.out.println("("+code+",-)");
                     syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(code,strToken));
                 }
             }
@@ -134,7 +132,6 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
                 }
                 retract();
                 int value = insertConst();
-//                System.out.println("(10,"+value+")");
                 syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(10,value+""));
             }
             else {
@@ -142,11 +139,9 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
                     case '+':
                         getChar();
                         if (ch == '+') {
-//                            System.out.println("(204,++)");
                             syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(204,"++"));
                         }
                         else {
-//                            System.out.println("(200,+)");
                             syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(200,"+"));
                             retract();
                         }
@@ -154,31 +149,25 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
                     case '-':
                         getChar();
                         if (ch == '-') {
-//                            System.out.println("(205,--)");
                             syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(205,"--"));
                         }
                         else {
-//                            System.out.println("(201,-)");
                             syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(201,"-"));
                             retract();
                         }
                         break;
                     case '*':
-//                        System.out.println("(202,*)");
                         syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(202,"*"));
                         break;
                     case '/':
-//                        System.out.println("(203,/)");
                         syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(203,"/"));
                         break;
                     case ':':
                         getChar();
                         if (ch == '=') {
-//                            System.out.println("(206,:=)");
                             syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(206,":="));
                         }
                         else {
-//                            System.out.println("(108,:)");
                             syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(108,":"));
                             retract();
                         }
@@ -186,11 +175,9 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
                     case '!':
                         getChar();
                         if (ch == '=') {
-//                            System.out.println("(207,!=)");
                             syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(207,"!="));
                         }
                         else {
-//                            System.out.println("(214,!)");
                             syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(214,"!"));
                             retract();
                         }
@@ -198,11 +185,9 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
                     case '>':
                         getChar();
                         if (ch == '=') {
-//                            System.out.println("(209,>=)");
                             syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(209,">="));
                         }
                         else {
-//                            System.out.println("(208,>)");
                             syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(208,">"));
                             retract();
                         }
@@ -210,11 +195,9 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
                     case '<':
                         getChar();
                         if (ch == '='){
-//                            System.out.println("(211,<=)");
                             syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(211,"<="));
                         }
                         else {
-//                            System.out.println("(210,<)");
                             syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(210,"<"));
                             retract();
                         }
@@ -222,7 +205,6 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
                     case '&':
                         getChar();
                         if (ch == '&') {
-//                            System.out.println("(212,&&)");
                             syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(212,"&&"));
                         }
                         else {
@@ -237,7 +219,6 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
                     case '|':
                         getChar();
                         if (ch == '|') {
-//                            System.out.println("(213,||)");
                             syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(213,"||"));
                         }
                         else {
@@ -250,35 +231,27 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
                         }
                         break;
                     case ',':
-//                        System.out.println("(100,,)");
                         syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(100,","));
                         break;
                     case ';':
-//                        System.out.println("(101,;)");
                         syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(101,";"));
                         break;
                     case '(':
-//                        System.out.println("(102,()");
                         syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(102,"("));
                         break;
                     case ')':
-//                        System.out.println("(103,))");
                         syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(103,")"));
                         break;
                     case '[':
-//                        System.out.println("(104,[)");
                         syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(104,"["));
                         break;
                     case ']':
-//                        System.out.println("(105,])");
                         syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(105,"]"));
                         break;
                     case '{':
-//                        System.out.println("(106,{)");
                         syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(106,"{"));
                         break;
                     case '}':
-//                        System.out.println("(107,-)");
                         syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(107,"}"));
                         break;
                     case '#':

@@ -37,8 +37,16 @@ public class ProjectItem {
     }
 
     public String getNextSymbol(){
-        if (location < right.length()) return right.charAt(location)+"";
-        else return null;
+        int i = location;
+        boolean flag = false;
+        while (i<right.length()){
+            if (right.charAt(i) == '`') return right.substring(location,i);
+            else {
+                flag = true;
+                i++;
+            }
+        }
+        return flag ? right.charAt(location)+"":"";
     }
 
     public boolean atLast(){
