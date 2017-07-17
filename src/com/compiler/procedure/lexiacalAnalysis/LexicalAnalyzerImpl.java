@@ -103,7 +103,6 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
 
 
     public Object lexicalAnalyzer(String line, int row){
-//        this.currRow = row;
         this.line = line;
         this.pointer = 0;
         while (pointer<line.length()){

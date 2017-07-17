@@ -26,14 +26,15 @@ public class SyntacticAnalyzerImpl implements SyntacticAnalyzer{
     public void syntacticAnalyzer(Lexical2Syntax lexical2Syntax) {
         System.out.println(lexical2Syntax.toString());
         while (true){
-            SLRItem currState = new SLRItem(state.peek(),lexical2Syntax.getName());
+            String opName = lexical2Syntax.getIdNumber()==1?"i":lexical2Syntax.getName();
+            SLRItem currState = new SLRItem(state.peek(),opName);
             if (actionMap.containsKey(currState)){
                 String action = actionMap.get(currState);
                 if (action.startsWith("s")){
                     System.out.println(action);
                     int nextState = Integer.parseInt(action.substring(1));
                     state.push(nextState);
-                    op.push(lexical2Syntax.getName());
+                    op.push(opName);
                     break;
                 }
                 if (action.startsWith("r")){
@@ -60,7 +61,7 @@ public class SyntacticAnalyzerImpl implements SyntacticAnalyzer{
                     throw new IllegalInputException();
                 } catch (IllegalInputException e) {
                     e.printStackTrace();
-                    System.out.println("规约错误!");
+                    System.out.println(currState.toString()+" 规约错误!");
                     System.exit(-1);
                 }
             }
@@ -74,6 +75,6 @@ public class SyntacticAnalyzerImpl implements SyntacticAnalyzer{
 
     private int getStmtRightLen(int i) {
         Stmt stmt = stmtMap.get(i);
-        return stmt.getRight().length();
+        return stmt.getRight().contains("`") ? stmt.getRight().split("`").length : stmt.getRight().length();
     }
 }

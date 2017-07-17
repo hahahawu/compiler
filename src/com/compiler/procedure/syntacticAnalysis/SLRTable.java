@@ -27,8 +27,8 @@ public class SLRTable {
     static {
         terminator.add("int");terminator.add(",");terminator.add(";");
         terminator.add(":=");terminator.add("+");terminator.add("*");terminator.add("i");
-        nonTerminals.add("S");nonTerminals.add("E");
-        nonTerminals.add("D");nonTerminals.add("B");nonTerminals.add("A");
+        nonTerminals.add("B");nonTerminals.add("S");
+        nonTerminals.add("E");nonTerminals.add("D");nonTerminals.add("A");
         symbols.addAll(terminator);
         symbols.addAll(nonTerminals);
         flags = new boolean[nonTerminals.size()];
@@ -53,10 +53,10 @@ public class SLRTable {
         ProjectItem tempPro = new ProjectItem("B","S",0);
         closure.put(0,new SetContainer(make_project(tempPro,false)));
         closure.get(0).getHashSet().add(tempPro);
-//        for (String vn : nonTerminals) make_first(vn,0);
-//        for (String vn : nonTerminals) make_follow(vn,0);
-//        constructor(0);
-//        make_actionTable();
+        for (String vn : nonTerminals) make_first(vn,0);
+        for (String vn : nonTerminals) make_follow(vn,0);
+        constructor(0);
+        make_actionTable();
     }
 
     /**
@@ -129,16 +129,28 @@ public class SLRTable {
                 if (projectItem.atLast()){
                     int stmtNum = getKeyByValue(new Stmt(projectItem.getLeft(),projectItem.getRight()));
                     for (String ter : terminator){
-                        if (projectItem.getLeft().equalsIgnoreCase("S"))
+                        if (projectItem.getLeft().equalsIgnoreCase("B"))
                             actionMap.put(new SLRItem(index,"#"),"acc");
                         else {
                             if (follow.get(projectItem.getLeft()).contains(ter))
+                                if (!actionMap.containsKey(new SLRItem(index,ter)))
                                 actionMap.put(new SLRItem(index,ter),"r"+stmtNum);
+                            else try {
+                                    throw new Exception();
+                                } catch (Exception e) {
+                                    System.out.println(index+" : while "+ter+" "+actionMap.get(new SLRItem(index,ter))+" vs r"+stmtNum);
+                                }
                         }
                     }
                 }
-                else if (isTerminal(projectItem.getNextSymbol()) && goMap.containsKey(tempItem))
-                    actionMap.put(tempItem,"s"+goMap.get(tempItem));
+                else if (isTerminal(projectItem.getNextSymbol()) && goMap.containsKey(tempItem)){
+                    if (!actionMap.containsKey(tempItem)) actionMap.put(tempItem,"s"+goMap.get(tempItem));
+                    else try {
+                        throw new Exception();
+                    } catch (Exception e) {
+                        System.out.println(index+" : while "+projectItem.getNextSymbol()+" "+actionMap.get(tempItem)+" vs s"+goMap.get(tempItem));
+                    }
+                }
                 else if (isNonTerminal(projectItem.getNextSymbol()) && gotoMap.containsKey(tempItem)) continue;
                 else {
                     try {
@@ -181,11 +193,15 @@ public class SLRTable {
 
     private static String getNextSymbol(String item, int location) {
         int i = location;
+        boolean flag = false;
         while (i<item.length()){
             if (item.charAt(i) == '`') return item.substring(location,i);
-            else i++;
+            else {
+                flag = true;
+                i++;
+            }
         }
-        return item.charAt(location)+"";
+        return flag ? item.charAt(location)+"" : "";
     }
 
     private static boolean isNonTerminal(String str) {
@@ -202,9 +218,9 @@ public class SLRTable {
         HashSet<String> vnFirst = new HashSet<>();
         first.put(vn,vnFirst);
         for (String hxs : stmtList.get(vn)){
-            if (isTerminal(hxs.charAt(index)+"")) vnFirst.add(hxs.charAt(index)+"");
+            if (isTerminal(getNextSymbol(hxs,index))) vnFirst.add(getNextSymbol(hxs,index));
             else {
-                String nextVn = hxs.charAt(index)+"";
+                String nextVn = getNextSymbol(hxs,index);
                 if (fst[nonTerminals.indexOf(nextVn)]){
                     for (String nxtFst : first.get(nextVn)){
                         if (nxtFst.equalsIgnoreCase("@")) vnFirst.addAll(make_first(vn,index+1));
@@ -222,15 +238,17 @@ public class SLRTable {
         if (followFlag[nonTerminals.indexOf(vn)]) return follow.get(vn);
         HashSet<String> vnFollow = new HashSet<>();
         follow.put(vn,vnFollow);
-        if (vn.equalsIgnoreCase("S")) vnFollow.add("#");
+        followFlag[nonTerminals.indexOf(vn)] = true;
+        if (vn.equalsIgnoreCase("B")) vnFollow.add("#");
         for (Object o : stmts.entrySet()){
             Map.Entry entry = (Map.Entry) o;
             String currStmtRight = ((Stmt)entry.getValue()).getRight();
             String currStmtLeft = ((Stmt)entry.getValue()).getLeft();
             for (int i=0;i<currStmtRight.length();i++){
-                if ((currStmtRight.charAt(i)+"").equalsIgnoreCase(vn)){
-                    if (i < currStmtRight.length()-1-index && isTerminal(currStmtRight.charAt(i+1+index)+""))
-                        vnFollow.add(currStmtRight.charAt(i+1+index)+"");
+                if (currStmtRight.charAt(i) == '`') continue;
+                if (getNextSymbol(currStmtRight,i).equalsIgnoreCase(vn)){
+                    if (i < currStmtRight.length()-1-index && isTerminal(getNextSymbol(currStmtRight,i+1)))
+                        vnFollow.add(getNextSymbol(currStmtRight,i+1+index));
                     if (i<currStmtRight.length()-1-index && isNonTerminal(currStmtRight.charAt(i+1+index)+"")){
                         String nextVn = currStmtRight.charAt(i+1+index)+"";
                         for (String nxtFlw : first.get(nextVn)){
