@@ -27,7 +27,7 @@ public class SyntacticAnalyzerImpl implements SyntacticAnalyzer{
     public void syntacticAnalyzer(Lexical2Syntax lexical2Syntax) {
         System.out.println(lexical2Syntax.toString());
         while (true){
-            String opName = lexical2Syntax.getIdNumber()==1?"i":lexical2Syntax.getName();
+            String opName = lexical2Syntax.getIdNumber()==1 || lexical2Syntax.getIdNumber() == 10?"i":lexical2Syntax.getName();
             SLRItem currState = new SLRItem(state.peek(),opName);
             if (actionMap.containsKey(currState)){
                 String action = actionMap.get(currState);

@@ -29,7 +29,7 @@ public class SLRTable {
         flags = new boolean[nonTerminals.size()];
         fst = new boolean[nonTerminals.size()];
         followFlag = new boolean[nonTerminals.size()];
-        ProjectItem tempPro = new ProjectItem("B","S",0);
+        ProjectItem tempPro = new ProjectItem("B","L",0);
         closure.put(0,new SetContainer(make_project(tempPro,false)));
         closure.get(0).getHashSet().add(tempPro);
         for (String vn : nonTerminals) make_first(vn,0);
