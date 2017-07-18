@@ -4,6 +4,7 @@ import com.compiler.exception.IllegalInputException;
 import com.compiler.model.Lexical2Syntax;
 import com.compiler.model.SLRItem;
 import com.compiler.model.Stmt;
+import com.compiler.procedure.DefineStmt;
 
 import java.util.Map;
 import java.util.Stack;
@@ -15,7 +16,7 @@ public class SyntacticAnalyzerImpl implements SyntacticAnalyzer{
     private static Stack<String> op = new Stack<>();
     private static Map<SLRItem,String> actionMap = SLRTable.actionMap;
     private static Map<SLRItem, Integer> gotoMap = SLRTable.gotoMap;
-    private static Map<Integer,Stmt> stmtMap = SLRTable.stmts;
+    private static Map<Integer,Stmt> stmtMap = DefineStmt.stmts;
 
     static {
         state.push(0);
