@@ -14,9 +14,9 @@ public class Test {
 //        SLRTable.make_actionTable();
         lookupMap3(SLRTable.first);
         lookupMap3(SLRTable.follow);
-//        lookupMap2(SLRTable.closure);
-//        lookupMap(SLRTable.actionMap);
-//        lookupMap(SLRTable.gotoMap);
+        lookupMap2(SLRTable.closure);
+        lookupMap(SLRTable.actionMap);
+        lookupMap(SLRTable.gotoMap);
     }
 
     private static void lookupMap3(Map<String, HashSet<String>> first) {

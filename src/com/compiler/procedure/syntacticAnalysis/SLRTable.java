@@ -33,9 +33,7 @@ public class SLRTable {
         closure.put(0,new SetContainer(make_project(tempPro,false)));
         closure.get(0).getHashSet().add(tempPro);
         for (String vn : nonTerminals) make_first(vn,0);
-        for (int i=0;i<3;i++){
-            for (String vn : nonTerminals) make_follow(vn,0);
-        }
+        for (String vn : nonTerminals) make_follow(vn,0);
         constructor(0);
         make_actionTable();
     }
@@ -217,7 +215,7 @@ public class SLRTable {
     }
 
     private static HashSet<String> make_follow(String vn, int index){
-        if (followFlag[nonTerminals.indexOf(vn)] && follow.get(vn).size() > 0) return follow.get(vn);
+        if (followFlag[nonTerminals.indexOf(vn)]) return follow.get(vn);
         HashSet<String> vnFollow = new HashSet<>();
         follow.put(vn,vnFollow);
         followFlag[nonTerminals.indexOf(vn)] = true;

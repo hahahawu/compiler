@@ -1,0 +1,6 @@
+int a,b,c;
+a := 3;
+b := 5;
+c := 1;
+boolean d;
+d := a<b && b>=3 || c==1;
