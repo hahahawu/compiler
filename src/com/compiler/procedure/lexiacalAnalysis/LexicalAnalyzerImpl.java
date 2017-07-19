@@ -3,9 +3,8 @@ package com.compiler.procedure.lexiacalAnalysis;
 import com.compiler.exception.IllegalInputException;
 import com.compiler.model.Lexical2Syntax;
 import com.compiler.procedure.symboltables.ConstantsTable;
-import com.compiler.procedure.symboltables.SymbolTable;
-import com.compiler.procedure.syntacticAnalysis.SyntacticAnalyzerImpl;
 import com.compiler.procedure.syntacticAnalysis.SyntacticAnalyzer;
+import com.compiler.procedure.syntacticAnalysis.SyntacticAnalyzerImpl;
 import com.compiler.symbols.KeyWords;
 
 import java.lang.reflect.Field;
@@ -87,7 +86,7 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
      * @return the id of strToken in the symbol table
      */
     private String insertID(){
-        SymbolTable.symbolMap.put(strToken,null);
+//        SymbolTable.symbolMap.put(strToken,null);
         return strToken;
     }
 

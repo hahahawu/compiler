@@ -4,7 +4,7 @@ import com.compiler.model.SLRItem;
 import com.compiler.model.ProjectItem;
 import com.compiler.model.SetContainer;
 import com.compiler.model.Stmt;
-import com.compiler.procedure.DefineStmt;
+import com.compiler.procedure.stmt_action.DefineStmt;
 
 import java.util.*;
 

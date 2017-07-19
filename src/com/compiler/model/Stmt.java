@@ -39,4 +39,8 @@ public class Stmt {
     public int hashCode() {
         return right.hashCode()*100 + left.hashCode()*99;
     }
+
+    public int getRightLength(){
+        return right.contains("`") ? right.split("`").length : right.length();
+    }
 }

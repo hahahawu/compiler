@@ -1,4 +1,4 @@
-package com.compiler.procedure;
+package com.compiler.procedure.stmt_action;
 
 import com.compiler.model.Stmt;
 
@@ -17,14 +17,14 @@ public class DefineStmt {
     static {
         terminator.add("int");terminator.add(",");terminator.add(";");terminator.add("-");
         terminator.add(":=");terminator.add("+");terminator.add("*");terminator.add("i");
-        terminator.add("/");terminator.add("(");terminator.add(")");
+        terminator.add("/");terminator.add("(");terminator.add(")");terminator.add("d");
         nonTerminals.add("B");nonTerminals.add("S");nonTerminals.add("T");
         nonTerminals.add("E");nonTerminals.add("D");nonTerminals.add("A");
         nonTerminals.add("F");nonTerminals.add("L");
         symbols.addAll(terminator);
         symbols.addAll(nonTerminals);
         stmts.put(0,new Stmt("B","L"));
-        stmts.put(1,new Stmt("S","E"));
+//        stmts.put(1,new Stmt("D","int`A"));
         stmts.put(2,new Stmt("S","A"));
         stmts.put(3,new Stmt("S","D"));
         stmts.put(4,new Stmt("D","D,i"));
@@ -37,16 +37,18 @@ public class DefineStmt {
         stmts.put(11,new Stmt("T","T/F"));
         stmts.put(12,new Stmt("F","i"));
         stmts.put(13,new Stmt("F","(E)"));
-        stmts.put(14,new Stmt("A","i`:=`E"));
-        stmts.put(15,new Stmt("L","S;"));
-        stmts.put(16,new Stmt("L","LS;"));
+        stmts.put(14,new Stmt("F","d"));
+        stmts.put(15,new Stmt("A","i`:=`E"));
+        stmts.put(16,new Stmt("L","S;"));
+        stmts.put(17,new Stmt("L","LS;"));
+//        stmts.put(18,new Stmt("D","D,A"));
         stmtList.put("B",new String[]{"L"});
-        stmtList.put("S",new String[]{"E","A","D"});
+        stmtList.put("S",new String[]{"A","D"});
         stmtList.put("E",new String[]{"E+T","E-T","T"});
         stmtList.put("D",new String[]{"D,i","int`i"});
         stmtList.put("A",new String[]{"i`:=`E"});
         stmtList.put("T",new String[]{"F","T*F","T/F"});
-        stmtList.put("F",new String[]{"i","(E)"});
+        stmtList.put("F",new String[]{"i","(E)","d"});
         stmtList.put("L",new String[]{"S;","LS;"});
     }
 
