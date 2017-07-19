@@ -33,7 +33,9 @@ public class SLRTable {
         closure.put(0,new SetContainer(make_project(tempPro,false)));
         closure.get(0).getHashSet().add(tempPro);
         for (String vn : nonTerminals) make_first(vn,0);
-        for (String vn : nonTerminals) make_follow(vn,0);
+        for (int i=0;i<3;i++){
+            for (String vn : nonTerminals) make_follow(vn,0);
+        }
         constructor(0);
         make_actionTable();
     }
@@ -171,8 +173,9 @@ public class SLRTable {
     }
 
     private static String getNextSymbol(String item, int location) {
-        int i = location;
         boolean flag = false;
+        if (item.charAt(location) == '`' && location != item.length()-1) location++;
+        int i = location;
         while (i<item.length()){
             if (item.charAt(i) == '`') return item.substring(location,i);
             else {
@@ -200,7 +203,7 @@ public class SLRTable {
             if (isTerminal(getNextSymbol(hxs,index))) vnFirst.add(getNextSymbol(hxs,index));
             else {
                 String nextVn = getNextSymbol(hxs,index);
-                if (fst[nonTerminals.indexOf(nextVn)]){
+                if (fst[nonTerminals.indexOf(nextVn)] && !nextVn.equals(vn)){
                     for (String nxtFst : first.get(nextVn)){
                         if (nxtFst.equalsIgnoreCase("@")) vnFirst.addAll(make_first(vn,index+1));
                         else vnFirst.add(nxtFst);
@@ -214,7 +217,7 @@ public class SLRTable {
     }
 
     private static HashSet<String> make_follow(String vn, int index){
-        if (followFlag[nonTerminals.indexOf(vn)]) return follow.get(vn);
+        if (followFlag[nonTerminals.indexOf(vn)] && follow.get(vn).size() > 0) return follow.get(vn);
         HashSet<String> vnFollow = new HashSet<>();
         follow.put(vn,vnFollow);
         followFlag[nonTerminals.indexOf(vn)] = true;
@@ -223,26 +226,29 @@ public class SLRTable {
             Map.Entry entry = (Map.Entry) o;
             String currStmtRight = ((Stmt)entry.getValue()).getRight();
             String currStmtLeft = ((Stmt)entry.getValue()).getLeft();
-            for (int i=0;i<currStmtRight.length();i++){
-                if (currStmtRight.charAt(i) == '`') continue;
-                if (getNextSymbol(currStmtRight,i).equalsIgnoreCase(vn)){
-                    if (i < currStmtRight.length()-1-index && isTerminal(getNextSymbol(currStmtRight,i+1)))
-                        vnFollow.add(getNextSymbol(currStmtRight,i+1+index));
-                    if (i<currStmtRight.length()-1-index && isNonTerminal(currStmtRight.charAt(i+1+index)+"")){
-                        String nextVn = currStmtRight.charAt(i+1+index)+"";
-                        for (String nxtFlw : first.get(nextVn)){
-                            if (nxtFlw.equalsIgnoreCase("@")) {
-                                if (i+1+index != currStmtRight.length()-1) vnFollow.addAll(make_follow(vn,index+1));
-                                else vnFollow.addAll(addLeftFollow(currStmtLeft));
+            if (currStmtRight.contains(vn)){
+                for (int i=index;i<currStmtRight.length();i++){
+                    if (currStmtRight.charAt(i) == '`') continue;
+                    if (getNextSymbol(currStmtRight,i).equalsIgnoreCase(vn)){
+                        if (i < currStmtRight.length()-1 && isTerminal(getNextSymbol(currStmtRight,i+vn.length())))
+                            vnFollow.add(getNextSymbol(currStmtRight,i+ vn.length()));
+                        else if (i<currStmtRight.length()-1 && isNonTerminal(getNextSymbol(currStmtRight,i+vn.length()))){
+                            String nextVn = getNextSymbol(currStmtRight,i+vn.length());
+                            for (String nxtFlw : first.get(nextVn)){
+                                if (nxtFlw.equalsIgnoreCase("@")) {
+                                    if (i+1 != currStmtRight.length()-1) vnFollow.addAll(make_follow(vn,index+nextVn.length()));
+                                    else vnFollow.addAll(addLeftFollow(currStmtLeft));
+                                }
+                                else vnFollow.add(nxtFlw);
                             }
-                            else vnFollow.add(nxtFlw);
                         }
-                    }
-                    if (i == currStmtRight.length()-1){
-                        vnFollow.addAll(addLeftFollow(currStmtLeft));
+                        else if (i == currStmtRight.length()-1){
+                            vnFollow.addAll(addLeftFollow(currStmtLeft));
+                        }
                     }
                 }
             }
+
         }
         return vnFollow;
     }

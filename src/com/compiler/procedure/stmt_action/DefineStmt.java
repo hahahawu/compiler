@@ -18,13 +18,19 @@ public class DefineStmt {
         terminator.add("int");terminator.add(",");terminator.add(";");terminator.add("-");
         terminator.add(":=");terminator.add("+");terminator.add("*");terminator.add("i");
         terminator.add("/");terminator.add("(");terminator.add(")");terminator.add("d");
-        nonTerminals.add("B");nonTerminals.add("S");nonTerminals.add("T");
-        nonTerminals.add("E");nonTerminals.add("D");nonTerminals.add("A");
+        terminator.add("boolean");terminator.add("&&");terminator.add("||");
+        terminator.add("!");terminator.add("<");terminator.add(">");
+        terminator.add("<=");terminator.add(">=");terminator.add("==");
+
+        nonTerminals.add("E");nonTerminals.add("E^");
+        nonTerminals.add("E.");nonTerminals.add("B");nonTerminals.add("S");nonTerminals.add("T");
+        nonTerminals.add("D");nonTerminals.add("A");
         nonTerminals.add("F");nonTerminals.add("L");
+
         symbols.addAll(terminator);
         symbols.addAll(nonTerminals);
         stmts.put(0,new Stmt("B","L"));
-//        stmts.put(1,new Stmt("D","int`A"));
+//        stmts.put(1,new Stmt("S","E"));
         stmts.put(2,new Stmt("S","A"));
         stmts.put(3,new Stmt("S","D"));
         stmts.put(4,new Stmt("D","D,i"));
@@ -41,15 +47,30 @@ public class DefineStmt {
         stmts.put(15,new Stmt("A","i`:=`E"));
         stmts.put(16,new Stmt("L","S;"));
         stmts.put(17,new Stmt("L","LS;"));
-//        stmts.put(18,new Stmt("D","D,A"));
+
+        stmts.put(18,new Stmt("D","boolean`i"));
+        stmts.put(19,new Stmt("E^","E`&&`"));
+        stmts.put(20,new Stmt("E.","E`||`"));
+        stmts.put(21,new Stmt("E","E^`E"));
+        stmts.put(22,new Stmt("E","E.`E"));
+        stmts.put(23,new Stmt("E","!E"));
+        stmts.put(24,new Stmt("E","F<F"));
+        stmts.put(25,new Stmt("E","F>F"));
+        stmts.put(26,new Stmt("E","F`==`F"));
+        stmts.put(27,new Stmt("E","F`>=`F"));
+        stmts.put(28,new Stmt("E","F`<=`F"));
+
         stmtList.put("B",new String[]{"L"});
         stmtList.put("S",new String[]{"A","D"});
-        stmtList.put("E",new String[]{"E+T","E-T","T"});
-        stmtList.put("D",new String[]{"D,i","int`i"});
+        stmtList.put("E",new String[]{"E+T","E-T","T","!E",
+                "F<F","F>F","F`==`F","F`>=`F","F`<=`F","E^`E","E.`E"});
+        stmtList.put("D",new String[]{"D,i","int`i","boolean`i"});
         stmtList.put("A",new String[]{"i`:=`E"});
         stmtList.put("T",new String[]{"F","T*F","T/F"});
         stmtList.put("F",new String[]{"i","(E)","d"});
         stmtList.put("L",new String[]{"S;","LS;"});
+        stmtList.put("E^",new String[]{"E`&&`"});
+        stmtList.put("E.",new String[]{"E`||`"});
     }
 
 }
