@@ -1,6 +1,7 @@
 package com.compiler.procedure.syntacticAnalysis;
 
-import com.compiler.exception.IllegalInputException;
+import com.compiler.Compiler;
+import com.compiler.exception.SyntacticException;
 import com.compiler.model.Lexical2Syntax;
 import com.compiler.model.SLRItem;
 import com.compiler.model.Stmt;
@@ -81,10 +82,9 @@ public class SyntacticAnalyzerImpl implements SyntacticAnalyzer{
             }
             else {
                 try {
-                    throw new IllegalInputException();
-                } catch (IllegalInputException e) {
-                    e.printStackTrace();
-                    System.out.println(currState.toString()+" 规约错误!");
+                    throw new SyntacticException(opName+" is not excepted.", Compiler.row);
+                } catch (SyntacticException e) {
+                    System.out.println(e.getMessage());
                     System.exit(-1);
                 }
             }

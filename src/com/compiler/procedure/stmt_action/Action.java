@@ -1,5 +1,7 @@
 package com.compiler.procedure.stmt_action;
 
+import com.compiler.Compiler;
+import com.compiler.exception.CastException;
 import com.compiler.exception.RedefinitionException;
 import com.compiler.exception.VariableIsNotDefinedException;
 import com.compiler.model.Stmt;
@@ -67,9 +69,9 @@ public class Action {
                 }
                 else {
                     try {
-                        throw new Exception();
-                    } catch (Exception e) {
-                        System.out.println("运算类型不匹配");
+                        throw new CastException("The type of "+child63.getName()+" and "+child61.getName()+"is not matched.", Compiler.row);
+                    } catch (CastException e) {
+                        System.out.println(e.getMessage());
                         System.exit(-1);
                     }
                 }
@@ -89,9 +91,9 @@ public class Action {
                 }
                 else {
                     try {
-                        throw new Exception();
-                    } catch (Exception e) {
-                        System.out.println("运算类型不匹配");
+                        throw new CastException("The type of "+child73.getName()+" and "+child71.getName()+"is not matched.", Compiler.row);
+                    } catch (CastException e) {
+                        System.out.println(e.getMessage());
                         System.exit(-1);
                     }
                 }
@@ -127,9 +129,9 @@ public class Action {
                 }
                 else {
                     try {
-                        throw new Exception();
-                    } catch (Exception e) {
-                        System.out.println("运算类型不匹配");
+                        throw new CastException("The type of "+child103.getName()+" and "+child101.getName()+"is not matched.", Compiler.row);
+                    } catch (CastException e) {
+                        System.out.println(e.getMessage());
                         System.exit(-1);
                     }
                 }
@@ -150,10 +152,10 @@ public class Action {
                     vn.setName(child121.getName());
                 }
                 else try {
-                    throw new VariableIsNotDefinedException(child121.getName());
+                    throw new VariableIsNotDefinedException(child121.getName()+" is not found in the symbol table..",Compiler.row);
                 } catch (VariableIsNotDefinedException e) {
                     System.out.println(e.getMessage());
-                    e.printStackTrace();
+                    System.exit(-1);
                 }
                 return vn;
             //F -> (E)
@@ -188,10 +190,9 @@ public class Action {
                     }
                 }
                 else try {
-                    throw new VariableIsNotDefinedException(child151.getName());
+                    throw new VariableIsNotDefinedException(child151.getName()+" is not found in the symbol table..",Compiler.row);
                 } catch (VariableIsNotDefinedException e) {
                     System.out.println(e.getMessage());
-                    e.printStackTrace();
                     System.exit(-1);
                 }
                 return vn;
@@ -234,10 +235,10 @@ public class Action {
             symbolTable.put(new SymbolTableIndex(child),child);
         else {
             try {
-                throw new RedefinitionException(child.getName());
+                throw new RedefinitionException(child.getName()+" have been defined.",Compiler.row);
             } catch (RedefinitionException e) {
                 System.out.println(e.getMessage());
-                e.printStackTrace();
+                System.exit(-1);
             }
         }
     }

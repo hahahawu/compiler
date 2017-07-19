@@ -1,5 +1,6 @@
 package com.compiler.procedure.lexiacalAnalysis;
 
+import com.compiler.Compiler;
 import com.compiler.exception.IllegalInputException;
 import com.compiler.model.Lexical2Syntax;
 import com.compiler.procedure.symboltables.ConstantsTable;
@@ -15,7 +16,6 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
     private String strToken = "";
     private String line = null;
     private int pointer = 0;
-//    private int currRow = 1;
     private SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzerImpl();
 
     /**
@@ -257,10 +257,10 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
                         break;
                     default:
                         try {
-                            throw new IllegalInputException();
+                            throw new IllegalInputException("Your input "+strToken+" is not legal.", Compiler.row);
                         } catch (IllegalInputException e) {
-                            System.out.println("Syntax Error.Line "+row+" : Your input \""+ch+"\" is not legal.");
-//                            System.exit(-1);
+                            System.out.println(e.getMessage());
+                            System.exit(-1);
                         }
                 }
             }
