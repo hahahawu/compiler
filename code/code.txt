@@ -1,9 +1,11 @@
-int a,b;
+int a,b,c[10,20];
+a := 3;
+b := 5;
 while a<20&&b>8 do{
     if a>10||b<16 then{
         if a<15 then{
-          a:=19;
-          b:=15
+          a := c[5,6];
+          b := c[3,4];
         }
         else {
           a:=11;
@@ -12,7 +14,7 @@ while a<20&&b>8 do{
     }
     else {
        a:=1;
-       b:=17
+       b:=17;
     };
 };
 
