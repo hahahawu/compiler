@@ -12,6 +12,7 @@ public class Node {
     private String scope;
     private int tc;
     private int fc;
+    private int chain = 0;
 
     public Node(String name) {
         this.name = name;
@@ -113,5 +114,13 @@ public class Node {
 
     public void setFc(int fc) {
         this.fc = fc;
+    }
+
+    public int getChain() {
+        return chain;
+    }
+
+    public void setChain(int chain) {
+        this.chain = chain;
     }
 }

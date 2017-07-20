@@ -1,10 +1,7 @@
 package com.compiler.procedure.stmt_action;
 
 import com.compiler.Compiler;
-import com.compiler.exception.CastException;
-import com.compiler.exception.RedefinitionException;
-import com.compiler.exception.VariableIsNotDefinedException;
-import com.compiler.exception.VariableIsNotInitializedException;
+import com.compiler.exception.*;
 import com.compiler.model.FourElementFormula;
 import com.compiler.model.Stmt;
 import com.compiler.model.SymbolTableIndex;
@@ -209,10 +206,13 @@ public class Action {
                     System.exit(-1);
                 }
                 return vn;
-            //L -> S
+            //L -> S;
             case 16:
+                child = children.get(0);
+                vn.setChain(child.getChain());
+                bp(child.getChain(),seq);
                 return vn;
-            //L -> LS
+            //L -> LS;
             case 17:
                 return vn;
             //D -> boolean i
@@ -411,6 +411,44 @@ public class Action {
                     System.exit(-1);
                 }
                 return vn;
+
+            //C -> if P then
+            case 31 :
+                child = children.get(1);
+                if (child.getType() == 309){
+                    bp(child.getTc(),seq);
+                    vn.setChain(child.getFc());
+                }
+                else {
+                    try {
+                        throw new SemanticException();
+                    } catch (SemanticException e) {
+                        System.exit(-1);
+                    }
+                }
+              return vn;
+            //S -> C{L}
+            case 32 :
+                child = children.get(3);
+                child1 = children.get(1);
+                vn.setChain(merge(child1.getChain(),child.getChain()));
+                return vn;
+            //Tp -> C {L} else
+            case 33:
+                int q = seq;
+                child = children.get(4);
+                child1 = children.get(2);
+                fourElementFormula = new FourElementFormula(seq++,"j","_","_","0");
+                fourElementFormulaMap.put(fourElementFormula.getSeq(),fourElementFormula);
+                bp(child.getChain(),seq);
+                vn.setChain(merge(child1.getChain(),q));
+                return vn;
+            //S -> Tp {L}
+            case 34:
+                child = children.get(3);
+                child1 = children.get(1);
+                vn.setChain(merge(child.getChain(),child1.getChain()));
+                return vn;
             default:
                 try {
                     throw new Exception();
@@ -434,6 +472,8 @@ public class Action {
     }
 
     private static int merge(int chain1, int chain2) {
+        if (chain1 == 0) return chain2;
+        if (chain2 == 0) return chain1;
         FourElementFormula fef1 = fourElementFormulaMap.get(chain1);
         FourElementFormula fef2 = fourElementFormulaMap.get(chain2);
         int nxt = Integer.parseInt(fef1.getRes());
