@@ -177,6 +177,7 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
                             try {
                                 throw new IllegalInputException("="+ch,row);
                             } catch (IllegalInputException e) {
+                                System.out.println(e.getMessage());
                                 System.exit(-1);
                             }
                         }

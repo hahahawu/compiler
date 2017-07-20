@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DefineStmt {
-    public static List<String> terminator = new ArrayList<>();
+    public static ArrayList<String> terminator = new ArrayList<>();
     public static List<String> nonTerminals = new ArrayList<>();
     public static List<String> symbols = new ArrayList<>();
     public static Map<String,String[]> stmtList = new HashMap<>();
@@ -23,13 +23,15 @@ public class DefineStmt {
         terminator.add("<=");terminator.add(">=");terminator.add("==");
         terminator.add("{");terminator.add("}");terminator.add("if");terminator.add("else");
         terminator.add("then");terminator.add("while");terminator.add("do");
+        terminator.add("[");terminator.add("]");
 
         nonTerminals.add("B");nonTerminals.add("S");nonTerminals.add("T");
         nonTerminals.add("D");nonTerminals.add("A");nonTerminals.add("E");
         nonTerminals.add("F");nonTerminals.add("L");nonTerminals.add("P");
         nonTerminals.add("P.");nonTerminals.add("P^");nonTerminals.add("G");
         nonTerminals.add("C");nonTerminals.add("Tp");nonTerminals.add("W");
-        nonTerminals.add("Wd");nonTerminals.add("Dl");
+        nonTerminals.add("Wd");nonTerminals.add("Dl");nonTerminals.add("V");
+        nonTerminals.add("El");
 
         symbols.addAll(terminator);
         symbols.addAll(nonTerminals);
@@ -78,11 +80,21 @@ public class DefineStmt {
         stmts.put(38,new Stmt("Dl","do`{`L`}`"));
         stmts.put(39,new Stmt("S","Dl`while`(`P`)`"));
 
+        stmts.put(40,new Stmt("D","int`V"));
+        stmts.put(41,new Stmt("D","D,V"));
+        stmts.put(42,new Stmt("A","V`:=`E"));
+        stmts.put(43,new Stmt("V","El`]"));
+        stmts.put(44,new Stmt("El","El`,`E"));
+        stmts.put(45,new Stmt("El","i`[`E"));
+        stmts.put(46,new Stmt("E","V"));
+
         stmtList.put("B",new String[]{"L"});
-        stmtList.put("S",new String[]{"A","D","C{L}","Tp`{`L`}`","Wd`{`L`}`","Dl`while`(`P`)`","do`{`L`}`"});
-        stmtList.put("E",new String[]{"E+T","E-T","T"});
-        stmtList.put("D",new String[]{"D,i","int`i","boolean`i"});
-        stmtList.put("A",new String[]{"i`:=`E","i`:=`P"});
+        stmtList.put("S",new String[]{"A","D","C{L}","Tp`{`L`}`","Wd`{`L`}`","Dl`while`(`P`)`"});
+        stmtList.put("E",new String[]{"E+T","E-T","T","V"});
+        stmtList.put("D",new String[]{"D,i","int`i","boolean`i","int`V","D,V"});
+        stmtList.put("A",new String[]{"i`:=`E","i`:=`P","V`:=`E"});
+        stmtList.put("V",new String[]{"El`]"});
+        stmtList.put("El",new String[]{"El`,`E","i`[`E"});
         stmtList.put("T",new String[]{"F","T*F","T/F"});
         stmtList.put("F",new String[]{"i","(E)","d"});
         stmtList.put("L",new String[]{"S;","LS;"});

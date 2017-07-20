@@ -2,12 +2,14 @@ package com.compiler.procedure.syntacticAnalysis;
 
 import com.compiler.Compiler;
 import com.compiler.exception.SyntacticException;
-import com.compiler.model.*;
+import com.compiler.model.FourElementFormula;
+import com.compiler.model.Lexical2Syntax;
+import com.compiler.model.SLRItem;
+import com.compiler.model.Stmt;
 import com.compiler.procedure.semanticAnalysis.SemanticAnalyer;
 import com.compiler.procedure.semanticAnalysis.SemanticAnalyzerImpl;
 import com.compiler.procedure.stmt_action.Action;
 import com.compiler.procedure.stmt_action.DefineStmt;
-import com.compiler.procedure.symboltables.SymbolTable;
 import com.compiler.procedure.tree.Node;
 
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ public class SyntacticAnalyzerImpl implements SyntacticAnalyzer{
     private static Stack<Node> nodeStack = new Stack<>();
     private static SemanticAnalyer semanticAnalyer = new SemanticAnalyzerImpl();
     private static Map<Integer,FourElementFormula> fourElementFormulaMap = Action.fourElementFormulaMap;
+    private static ArrayList<String> terminator = DefineStmt.terminator;
 
     static {
         state.push(0);
@@ -40,33 +43,33 @@ public class SyntacticAnalyzerImpl implements SyntacticAnalyzer{
             if (actionMap.containsKey(currState)){
                 String action = actionMap.get(currState);
                 if (action.startsWith("s")){
-//                    System.out.println(action);
+                    System.out.println(action);
                     int nextState = Integer.parseInt(action.substring(1));
                     state.push(nextState);
                     op.push(opName);
-                    makeNode(lexical2Syntax);
+//                    makeNode(lexical2Syntax);
                     break;
                 }
                 if (action.startsWith("r")){
-//                    System.out.println(action);
-                    ArrayList<Node> children = new ArrayList<>();
+                    System.out.println(action);
+//                    ArrayList<Node> children = new ArrayList<>();
                     int stmtNum = Integer.parseInt(action.substring(1));
                     int num = getStmtRightLen(stmtNum);
                     for (int i=0;i<num;i++) {
                         state.pop();
                         op.pop();
-                        children.add(nodeStack.pop());
+//                        children.add(nodeStack.pop());
                     }
                     int nextState = gotoMap.get(new SLRItem(state.peek(),getStmtLeft(stmtNum)));
                     state.push(nextState);
                     op.push(getStmtLeft(stmtNum));
-                    nodeStack.push(semanticAnalyer.semanticAnalyzer(stmtNum,children));
+//                    nodeStack.push(semanticAnalyer.semanticAnalyzer(stmtNum,children));
                     continue;
                 }
                 if (action.equalsIgnoreCase("acc")) {
-//                    System.out.println(action);
-//                    System.out.println("规约成功!");
-                    ArrayList<Node> children = new ArrayList<>();
+                    System.out.println(action);
+                    System.out.println("规约成功!");
+                    /*ArrayList<Node> children = new ArrayList<>();
                     children.add(nodeStack.pop());
                     nodeStack.push(semanticAnalyer.semanticAnalyzer(0,children));
                     System.out.println("--------------four element formula -----------");
@@ -77,13 +80,21 @@ public class SyntacticAnalyzerImpl implements SyntacticAnalyzer{
                         SymbolTableIndex symbolTableIndex = (SymbolTableIndex) entry.getKey();
                         Node node = (Node) entry.getValue();
                         System.out.println(symbolTableIndex.toString()+node.toString());
-                    }
+                    }*/
                     break;
                 }
             }
             else {
                 try {
-                    throw new SyntacticException(opName+" is not excepted.", Compiler.row);
+                    ArrayList<String> excepted = new ArrayList<>();
+                    int curr = currState.getClosure();
+                    for (String ter : terminator){
+                        if (actionMap.containsKey(new SLRItem(curr,ter)) && actionMap.get(new SLRItem(curr,ter)).startsWith("r"))
+                            excepted.add(ter);
+                    }
+                    String string = "";
+                    for (String str : excepted) string += str + " ";
+                    throw new SyntacticException(string+" is excepted.", Compiler.row);
                 } catch (SyntacticException e) {
                     System.out.println(e.getMessage());
                     System.exit(-1);

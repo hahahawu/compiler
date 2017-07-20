@@ -125,7 +125,7 @@ public class SLRTable {
                                 else try {
                                     throw new Exception();
                                 } catch (Exception e) {
-                                    System.out.println(index+" : while "+ter+" "+actionMap.get(new SLRItem(index,ter))+" vs r"+stmtNum);
+//                                    System.out.println(index+" : while "+ter+" "+actionMap.get(new SLRItem(index,ter))+" vs r"+stmtNum);
                                     actionMap.put(new SLRItem(index,ter),"r"+stmtNum);
                                 }
                         }
@@ -136,7 +136,7 @@ public class SLRTable {
                     else try {
                         throw new Exception();
                     } catch (Exception e) {
-                        System.out.println(index+" : while "+projectItem.getNextSymbol()+" "+actionMap.get(tempItem)+" vs s"+goMap.get(tempItem));
+//                        System.out.println(index+" : while "+projectItem.getNextSymbol()+" "+actionMap.get(tempItem)+" vs s"+goMap.get(tempItem));
                     }
                 }
                 else if (isNonTerminal(projectItem.getNextSymbol()) && gotoMap.containsKey(tempItem)) continue;
