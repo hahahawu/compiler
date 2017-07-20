@@ -12,7 +12,7 @@ public class Compiler {
     public static int row = 1;
     public static void main(String[] args){
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("code/while.txt")));
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("code/do-while.txt")));
             String line = null;
             LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzerImpl();
             while ((line = br.readLine()) != null) {

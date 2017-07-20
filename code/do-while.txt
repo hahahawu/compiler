@@ -1,0 +1,11 @@
+int a,b;
+a := 3;
+b := 4;
+do {
+    if a > 2 then {
+        b := 1;
+    }
+    else {
+        a := 1;
+    };
+} while (a<5 && b>1);

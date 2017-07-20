@@ -208,12 +208,15 @@ public class Action {
                 return vn;
             //L -> S;
             case 16:
-                child = children.get(0);
+                child = children.get(1);
                 vn.setChain(child.getChain());
                 bp(child.getChain(),seq);
                 return vn;
             //L -> LS;
             case 17:
+                child = children.get(1);
+                vn.setChain(child.getChain());
+                bp(child.getChain(),seq);
                 return vn;
             //D -> boolean i
             case 18:
@@ -469,6 +472,18 @@ public class Action {
                 fourElementFormula = new FourElementFormula(seq++,"j","_","_",child1.getQuad()+"");
                 fourElementFormulaMap.put(fourElementFormula.getSeq(),fourElementFormula);
                 vn.setChain(child1.getChain());
+                return vn;
+            // Dl -> do {L}
+            case 38:
+                vn.setQuad(seq);
+                vn.setChain(seq);
+                return vn;
+            //S -> Dl while (P)
+            case 39:
+                child = children.get(1);
+                child1 = children.get(4);
+                bp(child.getTc(),child1.getQuad());
+                vn.setChain(child1.getFc());
                 return vn;
             default:
                 try {

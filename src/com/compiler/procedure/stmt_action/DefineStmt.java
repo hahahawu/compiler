@@ -29,7 +29,7 @@ public class DefineStmt {
         nonTerminals.add("F");nonTerminals.add("L");nonTerminals.add("P");
         nonTerminals.add("P.");nonTerminals.add("P^");nonTerminals.add("G");
         nonTerminals.add("C");nonTerminals.add("Tp");nonTerminals.add("W");
-        nonTerminals.add("Wd");
+        nonTerminals.add("Wd");nonTerminals.add("Dl");
 
         symbols.addAll(terminator);
         symbols.addAll(nonTerminals);
@@ -75,8 +75,11 @@ public class DefineStmt {
         stmts.put(36,new Stmt("Wd","W`P`do`"));
         stmts.put(37,new Stmt("S","Wd`{`L`}`"));
 
+        stmts.put(38,new Stmt("Dl","do`{`L`}`"));
+        stmts.put(39,new Stmt("S","Dl`while`(`P`)`"));
+
         stmtList.put("B",new String[]{"L"});
-        stmtList.put("S",new String[]{"A","D","C{L}","Tp`{`L`}`","Wd`{`L`}`"});
+        stmtList.put("S",new String[]{"A","D","C{L}","Tp`{`L`}`","Wd`{`L`}`","Dl`while`(`P`)`","do`{`L`}`"});
         stmtList.put("E",new String[]{"E+T","E-T","T"});
         stmtList.put("D",new String[]{"D,i","int`i","boolean`i"});
         stmtList.put("A",new String[]{"i`:=`E","i`:=`P"});
@@ -91,6 +94,7 @@ public class DefineStmt {
         stmtList.put("Tp",new String[]{"C`{`L`}`else`"});
         stmtList.put("W",new String[]{"while`"});
         stmtList.put("Wd",new String[]{"W`P`do`"});
+        stmtList.put("Dl",new String[]{"do`{`L`}`"});
     }
 
 }
