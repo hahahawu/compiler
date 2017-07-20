@@ -17,6 +17,7 @@ public class Action {
     private static int count = 1;
     private static int seq = 100;
     public static Map<Integer,FourElementFormula> fourElementFormulaMap = new HashMap<>();
+    public static int getSeq(){return seq;}
     public static Node takeAction(int stmtNum, ArrayList<Node> children){
         Stmt stmt = DefineStmt.stmts.get(stmtNum);
         Node vn = new Node(stmt.getLeft());

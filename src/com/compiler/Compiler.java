@@ -11,6 +11,10 @@ import java.io.InputStreamReader;
 public class Compiler {
     public static int row = 1;
     public static void main(String[] args){
+        compiler();
+    }
+
+    private static void compiler() {
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("code/code.txt")));
             String line = null;

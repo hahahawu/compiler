@@ -1,6 +1,7 @@
 package com.compiler.procedure.syntacticAnalysis;
 
 import com.compiler.Compiler;
+import com.compiler.Display;
 import com.compiler.exception.SyntacticException;
 import com.compiler.model.*;
 import com.compiler.procedure.semanticAnalysis.SemanticAnalyer;
@@ -70,6 +71,7 @@ public class SyntacticAnalyzerImpl implements SyntacticAnalyzer{
                     ArrayList<Node> children = new ArrayList<>();
                     children.add(nodeStack.pop());
                     nodeStack.push(semanticAnalyer.semanticAnalyzer(0,children));
+                    Display.display();
                     System.out.println("--------------four element formula -----------");
                     lookupMap(fourElementFormulaMap);
                     System.out.println("-----------------symbol table-----------------");
