@@ -170,6 +170,17 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
                             retract();
                         }
                         break;
+                    case '=':
+                        getChar();
+                        if (ch == '=') syntacticAnalyzer.syntacticAnalyzer(new Lexical2Syntax(215,"=="));
+                        else {
+                            try {
+                                throw new IllegalInputException("="+ch,row);
+                            } catch (IllegalInputException e) {
+                                System.exit(-1);
+                            }
+                        }
+                        break;
                     case '!':
                         getChar();
                         if (ch == '=') {
@@ -209,8 +220,8 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
                             try {
                                 throw new IllegalInputException();
                             } catch (IllegalInputException e) {
-                                System.out.println("Syntax Error.Line "+row+" : Your input is not legal.");
-//                                System.exit(-1);
+                                System.out.println("Lexical Error.Line "+row+" : Your input is not legal.");
+                                System.exit(-1);
                             }
                         }
                         break;
@@ -223,8 +234,8 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
                             try {
                                 throw new IllegalInputException();
                             } catch (IllegalInputException e) {
-                                System.out.println("Syntax Error.Line "+row+" : Your input is not legal.");
-//                                System.exit(-1);
+                                System.out.println("Lexical Error.Line "+row+" : Your input is not legal.");
+                                System.exit(-1);
                             }
                         }
                         break;
@@ -257,7 +268,7 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
                         break;
                     default:
                         try {
-                            throw new IllegalInputException("Your input "+strToken+" is not legal.", Compiler.row);
+                            throw new IllegalInputException("Your input "+ch+" is not legal.", Compiler.row);
                         } catch (IllegalInputException e) {
                             System.out.println(e.getMessage());
                             System.exit(-1);

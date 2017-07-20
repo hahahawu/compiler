@@ -10,6 +10,8 @@ public class Node {
     private int type;
     private String val;
     private String scope;
+    private int tc;
+    private int fc;
 
     public Node(String name) {
         this.name = name;
@@ -95,5 +97,21 @@ public class Node {
     @Override
     public String toString() {
         return "Node{name="+name+",id="+id+",val="+val+",type="+type+",scope="+scope+"}";
+    }
+
+    public int getTc() {
+        return tc;
+    }
+
+    public void setTc(int tc) {
+        this.tc = tc;
+    }
+
+    public int getFc() {
+        return fc;
+    }
+
+    public void setFc(int fc) {
+        this.fc = fc;
     }
 }

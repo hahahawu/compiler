@@ -10,13 +10,11 @@ import java.util.Map;
 
 public class Test {
     public static void main(String[] args){
-//        SLRTable.constructor(0);
-//        SLRTable.make_actionTable();
-        lookupMap3(SLRTable.first);
-        lookupMap3(SLRTable.follow);
+//        lookupMap3(SLRTable.first);
+//        lookupMap3(SLRTable.follow);
         lookupMap2(SLRTable.closure);
         lookupMap(SLRTable.actionMap);
-        lookupMap(SLRTable.gotoMap);
+        lookupMap(SLRTable.goMap);
     }
 
     private static void lookupMap3(Map<String, HashSet<String>> first) {

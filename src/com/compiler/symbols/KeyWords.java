@@ -31,12 +31,18 @@ public class KeyWords {
     /* int */
     public static final int INT = 308;
 
-    /* float */
-    public static final int FLOAT = 309;
+    /* boolean */
+    public static final int BOOLEAN= 309;
 
     /* double */
     public static final int DOUBLE = 310;
 
     /* return  */
     public static final int RETURN = 311;
+
+    /* true */
+    public static final int TRUE = 312;
+
+    /* false */
+    public static final int FALSE = 313;
 }

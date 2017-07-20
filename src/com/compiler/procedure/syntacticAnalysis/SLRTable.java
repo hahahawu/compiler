@@ -19,7 +19,7 @@ public class SLRTable {
     public static Map<Integer,SetContainer> closure = new HashMap<>();
     private static boolean[] flags;
     private static int count = 0;
-    private static Map<SLRItem,Integer> goMap = new HashMap<>();
+    public static Map<SLRItem,Integer> goMap = new HashMap<>();
     public static Map<String,HashSet<String>> first = new HashMap<>();
     public static Map<String,HashSet<String>> follow = new HashMap<>();
     private static boolean[] fst;
@@ -71,8 +71,16 @@ public class SLRTable {
                 else {
                     SLRItem slrItem = new SLRItem(index,symbol);
                     int key = getKeyByValue(new SetContainer(newSet));
-                    goMap.put(slrItem,key);
-                    if (isNonTerminal(symbol)) gotoMap.put(slrItem,key);
+                    if (key != -1){
+                        goMap.put(slrItem,key);
+                        if (isNonTerminal(symbol)) gotoMap.put(slrItem,key);
+                    }
+                    else {
+                        closure.put(++count,new SetContainer(newSet));
+                        goMap.put(new SLRItem(index,symbol),count);
+                        if (isNonTerminal(symbol))
+                            gotoMap.put(new SLRItem(index,symbol),count);
+                    }
                 }
             }
         }
@@ -114,10 +122,11 @@ public class SLRTable {
                             if (follow.get(projectItem.getLeft()).contains(ter))
                                 if (!actionMap.containsKey(new SLRItem(index,ter)))
                                 actionMap.put(new SLRItem(index,ter),"r"+stmtNum);
-                            else try {
+                                else try {
                                     throw new Exception();
                                 } catch (Exception e) {
                                     System.out.println(index+" : while "+ter+" "+actionMap.get(new SLRItem(index,ter))+" vs r"+stmtNum);
+                                    actionMap.put(new SLRItem(index,ter),"r"+stmtNum);
                                 }
                         }
                     }
@@ -201,13 +210,18 @@ public class SLRTable {
             if (isTerminal(getNextSymbol(hxs,index))) vnFirst.add(getNextSymbol(hxs,index));
             else {
                 String nextVn = getNextSymbol(hxs,index);
-                if (fst[nonTerminals.indexOf(nextVn)] && !nextVn.equals(vn)){
-                    for (String nxtFst : first.get(nextVn)){
-                        if (nxtFst.equalsIgnoreCase("@")) vnFirst.addAll(make_first(vn,index+1));
-                        else vnFirst.add(nxtFst);
+                try {
+                    if (fst[nonTerminals.indexOf(nextVn)] && !nextVn.equals(vn)){
+                        for (String nxtFst : first.get(nextVn)){
+                            if (nxtFst.equalsIgnoreCase("@")) vnFirst.addAll(make_first(vn,index+1));
+                            else vnFirst.add(nxtFst);
+                        }
                     }
+                    else vnFirst.addAll(make_first(nextVn,0));
+                }catch (Exception e){
+                    System.out.println(vn+" "+hxs+" "+index+" "+nextVn);
+                    System.exit(-1);
                 }
-                else vnFirst.addAll(make_first(nextVn,0));
             }
         }
         first.put(vn,vnFirst);

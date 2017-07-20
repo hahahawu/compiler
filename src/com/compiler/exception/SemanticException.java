@@ -1,7 +1,7 @@
 package com.compiler.exception;
 
 public class SemanticException extends Exception{
-    public SemanticException() {}
+    public SemanticException() {super("Semantic Exception");}
 
     public SemanticException(String message) {
         super("Semantic exception : "+message);
