@@ -13,6 +13,7 @@ public class Node {
     private int tc;
     private int fc;
     private int chain = 0;
+    private int Quad;
 
     public Node(String name) {
         this.name = name;
@@ -122,5 +123,13 @@ public class Node {
 
     public void setChain(int chain) {
         this.chain = chain;
+    }
+
+    public int getQuad() {
+        return Quad;
+    }
+
+    public void setQuad(int quad) {
+        Quad = quad;
     }
 }

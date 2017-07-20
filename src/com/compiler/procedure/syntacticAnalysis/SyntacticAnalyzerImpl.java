@@ -33,7 +33,7 @@ public class SyntacticAnalyzerImpl implements SyntacticAnalyzer{
 
     @Override
     public void syntacticAnalyzer(Lexical2Syntax lexical2Syntax) {
-//        System.out.println(lexical2Syntax.toString());
+        System.out.println(lexical2Syntax.toString());
         while (true){
             String opName = lexical2Syntax.getIdNumber()==1?"i": (lexical2Syntax.getIdNumber() == 10 ? "d":lexical2Syntax.getName());
             SLRItem currState = new SLRItem(state.peek(),opName);
@@ -64,8 +64,8 @@ public class SyntacticAnalyzerImpl implements SyntacticAnalyzer{
                     continue;
                 }
                 if (action.equalsIgnoreCase("acc")) {
-                    System.out.println(action);
-                    System.out.println("规约成功!");
+//                    System.out.println(action);
+//                    System.out.println("规约成功!");
                     ArrayList<Node> children = new ArrayList<>();
                     children.add(nodeStack.pop());
                     nodeStack.push(semanticAnalyer.semanticAnalyzer(0,children));

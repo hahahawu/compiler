@@ -22,13 +22,14 @@ public class DefineStmt {
         terminator.add("!");terminator.add("<");terminator.add(">");
         terminator.add("<=");terminator.add(">=");terminator.add("==");
         terminator.add("{");terminator.add("}");terminator.add("if");terminator.add("else");
-        terminator.add("then");
+        terminator.add("then");terminator.add("while");terminator.add("do");
 
         nonTerminals.add("B");nonTerminals.add("S");nonTerminals.add("T");
         nonTerminals.add("D");nonTerminals.add("A");nonTerminals.add("E");
         nonTerminals.add("F");nonTerminals.add("L");nonTerminals.add("P");
         nonTerminals.add("P.");nonTerminals.add("P^");nonTerminals.add("G");
-        nonTerminals.add("C");nonTerminals.add("Tp");
+        nonTerminals.add("C");nonTerminals.add("Tp");nonTerminals.add("W");
+        nonTerminals.add("Wd");
 
         symbols.addAll(terminator);
         symbols.addAll(nonTerminals);
@@ -70,9 +71,12 @@ public class DefineStmt {
         stmts.put(33,new Stmt("Tp","C`{`L`}`else`"));
         stmts.put(34,new Stmt("S","Tp`{`L`}`"));
 
+        stmts.put(35,new Stmt("W","while`"));
+        stmts.put(36,new Stmt("Wd","W`P`do`"));
+        stmts.put(37,new Stmt("S","Wd`{`L`}`"));
 
         stmtList.put("B",new String[]{"L"});
-        stmtList.put("S",new String[]{"A","D","C{L}","Tp`{`L`}`"});
+        stmtList.put("S",new String[]{"A","D","C{L}","Tp`{`L`}`","Wd`{`L`}`"});
         stmtList.put("E",new String[]{"E+T","E-T","T"});
         stmtList.put("D",new String[]{"D,i","int`i","boolean`i"});
         stmtList.put("A",new String[]{"i`:=`E","i`:=`P"});
@@ -85,6 +89,8 @@ public class DefineStmt {
         stmtList.put("G",new String[]{"E<E","E>E","E`==`E","E`>=`E","E`<=`E"});
         stmtList.put("C",new String[]{"if`P`then`"});
         stmtList.put("Tp",new String[]{"C`{`L`}`else`"});
+        stmtList.put("W",new String[]{"while`"});
+        stmtList.put("Wd",new String[]{"W`P`do`"});
     }
 
 }

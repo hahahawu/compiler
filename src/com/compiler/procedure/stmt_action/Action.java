@@ -449,6 +449,27 @@ public class Action {
                 child1 = children.get(1);
                 vn.setChain(merge(child.getChain(),child1.getChain()));
                 return vn;
+            //W > while
+            case 35:
+                vn.setQuad(seq);
+                return vn;
+            //Wd -> W P do
+            case 36:
+                child = children.get(1);
+                child1 = children.get(2);
+                bp(child.getTc(),seq);
+                vn.setChain(child.getFc());
+                vn.setQuad(child1.getQuad());
+                return vn;
+            //S -> Wd {L}
+            case 37:
+                child = children.get(1);
+                child1 = children.get(3);
+                bp(child.getChain(),child1.getQuad());
+                fourElementFormula = new FourElementFormula(seq++,"j","_","_",child1.getQuad()+"");
+                fourElementFormulaMap.put(fourElementFormula.getSeq(),fourElementFormula);
+                vn.setChain(child1.getChain());
+                return vn;
             default:
                 try {
                     throw new Exception();
