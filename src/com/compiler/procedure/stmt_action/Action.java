@@ -485,6 +485,146 @@ public class Action {
                 bp(child.getTc(),child1.getQuad());
                 vn.setChain(child1.getFc());
                 return vn;
+            //D -> int V
+            case 40:
+                return vn;
+            //D -> D,V
+            case 41:
+                return vn;
+            //A -> V := E
+            case 42 :
+                child = children.get(0);
+                child1 = children.get(2);
+                fourElementFormula = new FourElementFormula(seq++,"[]=",child.getVal(),"_",child1.getVal()+"["+child1.getOffset()+"]");
+                fourElementFormulaMap.put(fourElementFormula.getSeq(),fourElementFormula);
+                return vn;
+            //V -> El]
+            case 43:
+                child = children.get(1);
+                if (symbolTable.containsKey(new SymbolTableIndex(child))){
+                    Node temp = symbolTable.get(new SymbolTableIndex(child));
+                    if (temp.getType() == 14){
+                        if (temp.isArrayInitial()){
+                            String tempT = "T"+count;
+                            int c = getC(temp);
+                            fourElementFormula = new FourElementFormula(seq++,"-",child.getArray(),c+"",tempT);
+                            fourElementFormulaMap.put(fourElementFormula.getSeq(),fourElementFormula);
+                            vn.setVal(tempT);
+                            vn.setOffset(child.getVal());
+                            vn.setName(child.getName());
+                        }
+                        else {
+                            vn.setType(14);
+                            vn.setArray(child.getArray());
+                            vn.setName(child.getName());
+                            vn.setDk(child.getDk());
+                            vn.setArrayInitial(true);
+                            symbolTable.put(new SymbolTableIndex(child),vn);
+                        }
+                    }
+                    else try {
+                        throw new SyntacticException(child.getName()+" is no an array",Compiler.row);
+                    } catch (SyntacticException e) {
+                        System.out.println(e.getMessage());
+                        System.exit(-1);
+                    }
+                }
+                else  try {
+                    throw new SyntacticException("Can not find "+child.getName()+" in the symbol table.",Compiler.row);
+                } catch (SyntacticException e) {
+                    System.out.println(e.getMessage());
+                    System.exit(-1);
+                }
+                return vn;
+            //El -> El,E
+            case 44:
+                child = children.get(0);
+                child1 = children.get(2);
+                // array have been defined.
+                if (symbolTable.containsKey(new SymbolTableIndex(child1))){
+                    Node temp = symbolTable.get(new SymbolTableIndex(child1));
+                    if (temp.getType() == 14){
+                        if (temp.isArrayInitial()){
+                            String tempT = "T"+count;
+                            count++;
+                            int dk = limit(temp,child1.getDim()+1);
+                            fourElementFormula = new FourElementFormula(seq++,"*",child1.getVal(),dk+"",tempT);
+                            fourElementFormula1 = new FourElementFormula(seq++,"+",child.getVal(),tempT,tempT);
+                            fourElementFormulaMap.put(fourElementFormula.getSeq(),fourElementFormula);
+                            fourElementFormulaMap.put(fourElementFormula1.getSeq(),fourElementFormula1);
+                            vn.setName(child1.getName());
+                            vn.setArray(child1.getArray());
+                            vn.setVal(tempT);
+                            vn.setDim(child1.getDim()+1);
+                        }
+                        else {
+                            ArrayList<Integer> dk = child1.getDk();
+                            dk.add(Integer.parseInt(child.getVal()));
+                            child1.setDk(dk);
+                            vn.setDk(dk);
+                            vn.setName(child1.getName());
+                            vn.setType(14);
+                        }
+                    }
+                    else try {
+                        throw new SyntacticException(child1.getName()+" is no an array",Compiler.row);
+                    } catch (SyntacticException e) {
+                        System.out.println(e.getMessage());
+                        System.exit(-1);
+                    }
+                }
+                else try {
+                    throw new SyntacticException("Can not find "+child1.getName()+" in the symbol table.",Compiler.row);
+                } catch (SyntacticException e) {
+                    System.out.println(e.getMessage());
+                    System.exit(-1);
+                }
+                return vn;
+            //El -> i[E
+            case 45 :
+                child = children.get(0);
+                child1 = children.get(2);
+                if (symbolTable.containsKey(new SymbolTableIndex(child1))){
+                    Node temp = symbolTable.get(new SymbolTableIndex(child1));
+                    if (temp.getType() == 14){
+                        vn.setArrayInitial(true);
+                        vn.setVal(child.getVal());
+                        vn.setDim(1);
+                        vn.setArray(child1.getName());
+                        vn.setName(child1.getName());
+                    }
+                    else try {
+                        throw new SyntacticException(child.getName()+" is no an array",Compiler.row);
+                    } catch (SyntacticException e) {
+                        System.out.println(e.getMessage());
+                        System.exit(-1);
+                    }
+                }
+                else {
+                    child1.setType(14);
+                    vn.setType(14);
+                    vn.setArray(child1.getName());
+                    ArrayList<Integer> dk = new ArrayList<>();
+                    dk.add(Integer.parseInt(child.getVal()));
+                    child1.setDk(dk);
+                    vn.setDk(dk);
+                    child1.setArrayInitial(false);
+                    vn.setArrayInitial(false);
+                    vn.setName(child1.getName());
+                    addSymbolTale(child1);
+                }
+                return vn;
+            //E -> V
+            case 46:
+                child = children.get(0);
+                String tempT = "T"+count;
+                count++;
+                fourElementFormula = new FourElementFormula(seq++,"=[]",child.getVal()+"["+child.getOffset()+"]","_",tempT);
+                fourElementFormulaMap.put(fourElementFormula.getSeq(),fourElementFormula);
+                vn.setVal(tempT);
+                vn.setName(tempT);
+                vn.setType(308);
+                return vn;
             default:
                 try {
                     throw new Exception();
@@ -493,6 +633,24 @@ public class Action {
                 }
         }
         return vn;
+    }
+
+    private static int getC(Node temp) {
+        ArrayList<Integer> arrayList = temp.getDk();
+        switch (arrayList.size()){
+            case 1:
+                return 1;
+            case 2:
+                return arrayList.get(1)+1;
+            case 3:
+                return arrayList.get(1)*arrayList.get(2) + arrayList.get(2) +1;
+        }
+        return -1;
+    }
+
+    private static int limit(Node node, int i) {
+        ArrayList<Integer> arrayList = node.getDk();
+        return arrayList.get(i-1);
     }
 
     private static void bp(int index, int seq) {

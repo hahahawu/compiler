@@ -14,6 +14,11 @@ public class Node {
     private int fc;
     private int chain = 0;
     private int Quad;
+    private int dim;
+    private String array;
+    private ArrayList<Integer> dk = new ArrayList<>();
+    private boolean arrayInitial = false;
+    private String offset;
 
     public Node(String name) {
         this.name = name;
@@ -131,5 +136,45 @@ public class Node {
 
     public void setQuad(int quad) {
         Quad = quad;
+    }
+
+    public int getDim() {
+        return dim;
+    }
+
+    public void setDim(int dim) {
+        this.dim = dim;
+    }
+
+    public String getArray() {
+        return array;
+    }
+
+    public void setArray(String array) {
+        this.array = array;
+    }
+
+    public ArrayList<Integer> getDk() {
+        return dk;
+    }
+
+    public void setDk(ArrayList<Integer> dk) {
+        this.dk = dk;
+    }
+
+    public boolean isArrayInitial() {
+        return arrayInitial;
+    }
+
+    public void setArrayInitial(boolean arrayInitial) {
+        this.arrayInitial = arrayInitial;
+    }
+
+    public String getOffset() {
+        return offset;
+    }
+
+    public void setOffset(String offset) {
+        this.offset = offset;
     }
 }
